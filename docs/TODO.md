@@ -1,73 +1,73 @@
 # Agent Walker TODO
 
-## Prototype
+## プロトタイプ
 
-- [x] Build static three-pane UI prototype.
-- [x] Add sidebar views for Inbox, Read Later, Valuable, Skipped, and Topics.
-- [x] Add post selection and right detail pane.
-- [x] Add hover actions on post rows.
-- [x] Add `Collect last 24h` button.
-- [x] Mock collection status and Inbox insertion.
-- [x] Document MVP spec and design.
+- [x] 静的な 3 ペイン UI プロトタイプを作成する。
+- [x] Inbox、Read Later、Valuable、Skipped、Topics の sidebar view を追加する。
+- [x] 投稿選択と右 detail pane を実装する。
+- [x] 投稿行の hover action を追加する。
+- [x] `Collect last 24h` ボタンを追加する。
+- [x] 収集ステータスと Inbox 追加を mock する。
+- [x] MVP 仕様と設計を docs にまとめる。
 
-## Repository Setup
+## リポジトリ整備
 
-- [ ] Decide final app stack.
-- [ ] Convert static prototype into app scaffold.
-- [ ] Add README with product overview and local setup.
-- [ ] Add formatter and linting.
-- [ ] Add initial CI.
+- [ ] 最終的な app stack を決める。
+- [ ] 静的プロトタイプを app scaffold に移植する。
+- [ ] README にプロダクト概要とローカル起動手順を書く。
+- [ ] formatter と lint を追加する。
+- [ ] 初期 CI を追加する。
 
-## Frontend
+## フロントエンド
 
-- [ ] Port prototype to React components.
-- [ ] Create layout components for sidebar, feed, and detail pane.
-- [ ] Implement view state for Inbox, Read Later, Valuable, Skipped, and Topics.
-- [ ] Implement post action state transitions.
-- [ ] Add settings UI for system prompt and X List id.
-- [ ] Add collection progress states.
-- [ ] Add empty states for each view.
+- [ ] プロトタイプを React component に移植する。
+- [ ] sidebar、feed、detail pane の layout component を作る。
+- [ ] Inbox、Read Later、Valuable、Skipped、Topics の view state を実装する。
+- [ ] 投稿 action の状態遷移を実装する。
+- [ ] system prompt と X List id の settings UI を作る。
+- [ ] collection progress state を実装する。
+- [ ] 各 view の empty state を整える。
 
-## Backend
+## バックエンド
 
-- [ ] Add persistence layer.
-- [ ] Create schema for settings, tracked lists, posts, evaluations, and user actions.
-- [ ] Implement post deduplication by X post id.
-- [ ] Implement collection run recordkeeping.
-- [ ] Add API route for `Collect last 24h`.
-- [ ] Add API route for user actions.
+- [ ] 永続化レイヤーを追加する。
+- [ ] settings、tracked lists、posts、evaluations、user actions の schema を作る。
+- [ ] X post id による重複排除を実装する。
+- [ ] collection run の記録を実装する。
+- [ ] `Collect last 24h` 用 API route を作る。
+- [ ] user action 用 API route を作る。
 
 ## X API
 
-- [ ] Configure X API credentials.
-- [ ] Implement List posts fetcher.
-- [ ] Fetch up to two pages with `max_results=100`.
-- [ ] Filter posts to last 24 hours.
-- [ ] Store only new posts.
-- [ ] Handle rate limit and API errors.
+- [ ] X API credentials を設定する。
+- [ ] List posts fetcher を実装する。
+- [ ] `max_results=100` で最大 2 ページ取得する。
+- [ ] 過去 24 時間の投稿だけに絞る。
+- [ ] 新規投稿だけ保存する。
+- [ ] rate limit と API error を扱う。
 
 ## Agent Evaluation
 
-- [ ] Define structured evaluation JSON schema.
-- [ ] Implement relevance scoring prompt.
-- [ ] Include system prompt in evaluation context.
-- [ ] Include recent `Valuable`, `Read Later`, and `Skipped` examples.
-- [ ] Evaluate only new posts.
-- [ ] Select up to 50 posts for Inbox display.
-- [ ] Persist score, summary, reason, tags, and display eligibility.
+- [ ] structured evaluation JSON schema を定義する。
+- [ ] relevance scoring prompt を実装する。
+- [ ] evaluation context に system prompt を含める。
+- [ ] 最近の `Valuable`、`Read Later`、`Skipped` examples を含める。
+- [ ] 新規投稿だけ評価する。
+- [ ] Inbox 表示候補を最大 50 件に絞る。
+- [ ] score、summary、reason、tags、display eligibility を保存する。
 
-## Product Decisions
+## プロダクト判断
 
-- [ ] Decide whether `Read Later` should remain in Inbox or move out immediately.
-- [ ] Decide whether `Valuable` should require a note.
-- [ ] Decide whether `Skipped` posts should be hidden permanently or recoverable.
-- [ ] Decide how many historical preference examples to include in Agent prompts.
-- [ ] Decide whether collection should support multiple X Lists in MVP.
+- [ ] `Read Later` にした投稿を Inbox に残すか、すぐ移動するか決める。
+- [ ] `Valuable` に note を必須にするか決める。
+- [ ] `Skipped` 投稿を永久に隠すか、復元可能にするか決める。
+- [ ] Agent prompt に含める historical preference examples の件数を決める。
+- [ ] MVP で複数 X List を扱うか決める。
 
-## Later
+## 後でやる
 
-- [ ] Link expansion and article extraction.
-- [ ] Natural language search over saved posts.
-- [ ] Browser extension for manual capture.
-- [ ] Additional sources beyond X.
-- [ ] Weekly digest.
+- [ ] リンク展開と記事本文抽出。
+- [ ] 保存済み投稿の自然言語検索。
+- [ ] 手動 capture 用ブラウザ拡張。
+- [ ] X 以外の情報ソース追加。
+- [ ] 週次 digest。

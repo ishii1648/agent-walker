@@ -1,51 +1,53 @@
-# Agent Walker Design
+# Agent Walker 設計
 
-## Product Shape
+## プロダクトの形
 
-Agent Walker is a personal research inbox with a flow UI. It should feel closer to a work tool than a social feed: quiet, dense, fast to scan, and built around triage.
+Agent Walker は、個人用の research inbox です。SNS フィードではなく、作業用の情報端末として設計します。
 
-The core design principle is:
+目指す体験は、静かで、情報密度があり、流し読みしやすく、仕分けが速いことです。
 
-> Collect broadly, evaluate cheaply where possible, show narrowly.
+基本方針:
 
-The product should not create another timeline. It should create a small, high-signal reading queue.
+> 広めに収集し、安く絞り込み、狭く表示する。
 
-## Architecture
+このプロダクトは「もう一つのタイムライン」を作るのではなく、「読む価値が高い小さなキュー」を作ります。
+
+## 全体アーキテクチャ
 
 ```text
 X List
-  ↓ user-triggered collection
+  ↓ ユーザー操作で収集開始
 X API fetcher
-  ↓ up to 200 recent posts
+  ↓ 最大 200 件の最近の投稿
 Raw post store
-  ↓ dedupe by post id
+  ↓ post id で重複排除
 New candidates
   ↓ Agent evaluation
 Evaluations
-  ↓ top ranked candidates
-Inbox, max 50 posts
+  ↓ 上位候補を選抜
+Inbox, 最大 50 件
   ↓ user action
 Read Later / Valuable / Skipped
 ```
 
-## Suggested Stack
+## 推奨スタック
 
-The first full implementation can use:
+本実装の初期スタック案:
 
-- Next.js / React for the UI.
-- TypeScript for app code.
-- SQLite for local-first persistence.
-- Prisma or Drizzle for schema and migrations.
-- OpenAI API for Agent scoring.
-- X API v2 for List post collection.
+- UI: Next.js / React
+- 言語: TypeScript
+- 永続化: SQLite
+- ORM: Prisma または Drizzle
+- Agent scoring: OpenAI API
+- 投稿取得: X API v2
 
-The current prototype is static HTML/CSS/JS and should be treated as a visual and interaction reference, not the final app architecture.
+現在の実装は静的 HTML/CSS/JS のプロトタイプです。最終的な app architecture ではなく、UI と interaction の参照実装として扱います。
 
-## Data Model
+## データモデル
 
 ### settings
 
-Stores personal configuration.
+個人設定を保存します。
 
 ```ts
 type Settings = {
@@ -58,7 +60,7 @@ type Settings = {
 
 ### tracked_lists
 
-Stores X Lists to collect from.
+収集対象の X List を保存します。
 
 ```ts
 type TrackedList = {
@@ -74,7 +76,7 @@ type TrackedList = {
 
 ### posts
 
-Stores raw posts fetched from X.
+X から取得した raw post を保存します。
 
 ```ts
 type Post = {
@@ -92,7 +94,7 @@ type Post = {
 
 ### evaluations
 
-Stores Agent outputs.
+Agent の評価結果を保存します。
 
 ```ts
 type Evaluation = {
@@ -109,7 +111,7 @@ type Evaluation = {
 
 ### user_actions
 
-Stores user classification and preference data.
+ユーザーの分類と preference signal を保存します。
 
 ```ts
 type UserAction = {
@@ -122,57 +124,57 @@ type UserAction = {
 };
 ```
 
-## X API Collection Design
+## X API 収集設計
 
-Use the X API List posts endpoint:
+X API の List posts endpoint を使います。
 
 ```text
 GET /2/lists/:id/tweets
 ```
 
-Initial policy:
+初期ポリシー:
 
 - `max_results=100`
-- Fetch up to two pages per collection run.
-- Stop after 200 posts, no matter how many pages are available.
-- Filter to the last 24 hours.
-- Dedupe against stored `xPostId`.
+- 1 回の収集で最大 2 ページまで取得。
+- ページが残っていても 200 件で止める。
+- 過去 24 時間の投稿だけを対象にする。
+- 保存済み `xPostId` はスキップする。
 
-Important implementation detail:
+重要な点:
 
-- The API fetch limit and UI display limit are separate.
-- The fetcher may collect 200 posts.
-- The Agent may select at most 50 posts for the Inbox.
+- API 取得上限と UI 表示上限を分ける。
+- fetcher は最大 200 件収集する。
+- Agent は最大 50 件だけ Inbox 表示候補として選ぶ。
 
-## Agent Design
+## Agent 設計
 
-The Agent should receive a compact context packet:
+Agent には compact な context packet を渡します。
 
-- User system prompt.
-- A small sample of recent `Valuable` posts.
-- A small sample of recent `Read Later` posts.
-- A small sample of recent `Skipped` posts.
-- Candidate post text and metadata.
+- ユーザー system prompt。
+- 最近の `Valuable` 投稿サンプル。
+- 最近の `Read Later` 投稿サンプル。
+- 最近の `Skipped` 投稿サンプル。
+- 候補投稿の本文とメタデータ。
 
-For MVP, favor a simple scoring pass over complex multi-agent orchestration.
+MVP では複雑な multi-agent orchestration ではなく、シンプルな scoring pass を優先します。
 
-Suggested evaluation rubric:
+評価軸:
 
-- Relevance to the system prompt.
-- Practical usefulness.
-- Novelty compared with previously saved items.
-- Signal quality versus generic commentary.
-- Fit with historical user actions.
+- system prompt への関連度。
+- 実務・学習への有用性。
+- 既存保存アイテムと比べた新規性。
+- 一般的な感想や薄いニュース紹介ではないか。
+- 過去のユーザー操作との相性。
 
-The Agent should return structured JSON that maps directly to the UI.
+Agent の出力は UI に直接渡せる structured JSON にします。
 
-## UI Design
+## UI 設計
 
 ### Sidebar
 
-The sidebar contains:
+Sidebar には以下を置きます。
 
-- Product identity.
+- Product identity。
 - Flow views:
   - Inbox
   - Read Later
@@ -182,16 +184,16 @@ The sidebar contains:
   - Agents
   - LLM Apps
   - AI UI
-- Source status.
-- Settings entry.
+- Source status。
+- Settings entry。
 
 ### Header
 
-The header contains:
+Header には以下を置きます。
 
-- Current view title.
-- Collection status.
-- `Collect last 24h` button.
+- 現在の view title。
+- Collection status。
+- `Collect last 24h` button。
 
 Status examples:
 
@@ -201,9 +203,9 @@ Status examples:
 
 ### Feed
 
-The feed is text-first and scan-friendly.
+Feed は text-first で scan しやすい形にします。
 
-Post actions are hidden until hover to keep the feed light:
+投稿アクションは hover 時に表示します。
 
 - `Read Later`
 - `Valuable`
@@ -211,34 +213,34 @@ Post actions are hidden until hover to keep the feed light:
 
 ### Detail Pane
 
-The detail pane is always visible on desktop.
+Detail pane は desktop では常時表示します。
 
-It provides the richer explanation surface:
+ここでは richer explanation surface を提供します。
 
-- Agent summary.
-- Why it matters.
-- Tags.
-- Notes.
-- Original source link.
+- Agent summary。
+- Why it matters。
+- Tags。
+- Notes。
+- Original source link。
 
-## Cost Control
+## コスト制御
 
-Cost should be controlled at multiple layers:
+複数レイヤーでコストを抑えます。
 
-- Manual collection instead of continuous background crawling.
-- Maximum 200 fetched posts per run.
-- Deduplicate before evaluation.
-- Evaluate only new candidates.
-- Display maximum 50 posts.
-- Prefer compact preference examples in prompts.
+- 常時巡回ではなく、手動収集。
+- 1 回の取得は最大 200 件。
+- 評価前に重複排除。
+- 新規候補だけ Agent 評価。
+- UI 表示は最大 50 件。
+- prompt に含める preference examples は compact にする。
 
-## Future Extensions
+## 将来拡張
 
-Likely next phases:
+次フェーズ候補:
 
-- Link expansion and article extraction.
-- Natural language search over saved `Valuable` posts.
-- Additional sources such as RSS, GitHub, arXiv, Hacker News, and YouTube.
-- Browser extension for manual capture.
-- Weekly summary generation.
-- More advanced preference learning.
+- リンク展開と記事本文抽出。
+- 保存済み `Valuable` 投稿の自然言語検索。
+- RSS、GitHub、arXiv、Hacker News、YouTube などの追加ソース。
+- 手動保存用ブラウザ拡張。
+- 週次サマリー生成。
+- より高度な preference learning。
