@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signal Flow</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="Navigation">
+        <div class="brand">
+          <div class="brand-mark">SF</div>
+          <div>
+            <p class="brand-kicker">Personal AI Research</p>
+            <h1>Signal Flow</h1>
+          </div>
+        </div>
+
+        <nav class="nav-groups" aria-label="Views">
+          <section>
+            <p class="nav-label">Flow</p>
+            <button class="nav-item active" type="button" data-view="inbox">
+              <span class="nav-icon">#</span>
+              <span>Inbox</span>
+              <span class="count">18</span>
+            </button>
+            <button class="nav-item" type="button" data-view="read_later">
+              <span class="nav-icon">+</span>
+              <span>Read Later</span>
+              <span class="count">7</span>
+            </button>
+            <button class="nav-item" type="button" data-view="valuable">
+              <span class="nav-icon">*</span>
+              <span>Valuable</span>
+              <span class="count">23</span>
+            </button>
+            <button class="nav-item" type="button" data-view="skipped">
+              <span class="nav-icon">-</span>
+              <span>Skipped</span>
+            </button>
+          </section>
+
+          <section>
+            <p class="nav-label">Topics</p>
+            <button class="nav-item" type="button" data-view="topic:Agents">
+              <span class="nav-icon">#</span>
+              <span>Agents</span>
+            </button>
+            <button class="nav-item" type="button" data-view="topic:LLM Apps">
+              <span class="nav-icon">#</span>
+              <span>LLM Apps</span>
+            </button>
+            <button class="nav-item" type="button" data-view="topic:AI UI">
+              <span class="nav-icon">#</span>
+              <span>AI UI</span>
+            </button>
+          </section>
+        </nav>
+
+        <div class="source-card">
+          <p class="source-label">Watching</p>
+          <strong>X List: AI builders</strong>
+          <span>42 accounts synced 14 min ago</span>
+        </div>
+
+        <button class="settings-button" type="button">Settings</button>
+      </aside>
+
+      <section class="feed-pane" aria-label="Curated posts">
+        <header class="feed-header">
+          <div>
+            <p class="eyebrow" id="feedEyebrow">Inbox</p>
+            <h2 id="feedTitle">今日の候補</h2>
+          </div>
+          <div class="feed-tools">
+            <div class="collection-status" id="collectionStatus">
+              <span>Idle</span>
+              <strong>200 collected / 50 shown</strong>
+            </div>
+            <button class="collect-button" id="collectButton" type="button">Collect last 24h</button>
+          </div>
+        </header>
+
+        <div class="prompt-strip">
+          <span>Agent Prompt</span>
+          <p>AI Agent、LLM アプリ、開発者ツール、UI/UX の実装知見を優先。薄いニュース紹介は下げる。</p>
+        </div>
+
+        <div class="date-divider" id="feedDivider">May 2, 2026</div>
+
+        <ol class="post-list" id="postList"></ol>
+      </section>
+
+      <aside class="detail-pane" aria-label="Post detail">
+        <div class="detail-empty" id="detailEmpty">
+          <p>投稿を選ぶと、Agent の判定理由と保存メモがここに出ます。</p>
+        </div>
+        <article class="detail-card" id="detailCard" hidden>
+          <header>
+            <div>
+              <p class="eyebrow">Selected Post</p>
+              <h2 id="detailAuthor"></h2>
+            </div>
+            <a id="detailSource" href="#" target="_blank" rel="noreferrer">Open X</a>
+          </header>
+
+          <p class="detail-text" id="detailText"></p>
+
+          <section class="detail-section">
+            <h3>Agent Summary</h3>
+            <p id="detailSummary"></p>
+          </section>
+
+          <section class="detail-section">
+            <h3>Why It Matters</h3>
+            <p id="detailReason"></p>
+          </section>
+
+          <section class="detail-section">
+            <h3>Tags</h3>
+            <div class="tag-row" id="detailTags"></div>
+          </section>
+
+          <section class="detail-section">
+            <h3>Save Note</h3>
+            <textarea id="noteInput" rows="5" placeholder="読んだ後の気づきや、後で探すためのメモ"></textarea>
+          </section>
+
+          <div class="detail-actions">
+            <button type="button" class="soft">Read Later</button>
+            <button type="button" class="primary">Valuable</button>
+          </div>
+        </article>
+      </aside>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
