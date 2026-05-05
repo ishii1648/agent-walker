@@ -30,18 +30,39 @@ Inbox, 最大 50 件
 Read Later / Valuable / Skipped
 ```
 
-## 推奨スタック
+## 採用スタック
 
-本実装の初期スタック案:
+本実装は Deno + Fresh を採用します。
 
-- UI: Next.js / React
-- 言語: TypeScript
-- 永続化: SQLite
-- ORM: Prisma または Drizzle
+- ランタイム: Deno
+- UI フレームワーク: Fresh（Preact + Islands Architecture）
+- 言語: TypeScript（Deno 標準で組み込み）
+- 永続化: SQLite（`jsr:@db/sqlite`）
+- ORM: Drizzle（Deno 対応）
 - Agent scoring: OpenAI API
 - 投稿取得: X API v2
+- 整形/静的検査/テスト: `deno fmt` / `deno lint` / `deno test`
 
 現在の実装は静的 HTML/CSS/JS のプロトタイプです。最終的な app architecture ではなく、UI と interaction の参照実装として扱います。
+
+### Deno + Fresh を選んだ理由
+
+個人用ツールとしての主要なリスクは、ローカル端末上での API key 漏洩や SQLite データ流出です。npm の supply chain 攻撃に対する直接的な防御として、Deno の permission model（`--allow-net=api.x.com,api.openai.com` のように許可範囲を限定する）が有効に働きます。
+
+また Fresh の Islands Architecture は、3 ペインで構成され大半が読み取り中心となる本プロダクトの UI と相性が良く、配信する JS を最小限に抑えられます。Preact は React と書き味がほぼ同じで、必要になれば React/Vite 構成へ移行する余地もあります。
+
+`deno fmt` / `deno lint` / `deno test` / `deno task` が標準で揃うため、formatter・lint・タスクランナーの選定や設定が不要になります。
+
+### permission scope の方針
+
+`deno task start` で渡す permission flag は次の最小集合を初期値とします。
+
+- `--allow-net=api.x.com,api.openai.com,localhost`: X API、OpenAI API、開発サーバ。
+- `--allow-read=.`: プロジェクト配下の静的ファイルと SQLite ファイル。
+- `--allow-write=./data`: SQLite ファイル更新先のみ。
+- `--allow-env=X_BEARER_TOKEN,OPENAI_API_KEY,DATABASE_URL`: 必要な環境変数のみ。
+
+`--allow-all` は使用しません。
 
 ## データモデル
 
