@@ -48,17 +48,20 @@ app.js
 - [設計](docs/design.md)
 - [TODO](docs/TODO.md)
 
-## 次の実装候補
+## 次の実装
 
 今後は、この静的プロトタイプを参照しながら本実装へ移行します。
 
-候補スタック:
+採用スタック:
 
-- Next.js / React
-- TypeScript
-- SQLite
-- Prisma または Drizzle
-- OpenAI API
-- X API v2
+- ランタイム: Deno
+- UI フレームワーク: Fresh（Preact + Islands Architecture）
+- 言語: TypeScript（Deno 標準）
+- 永続化: SQLite（`jsr:@db/sqlite`）
+- ORM: Drizzle
+- Agent scoring: OpenAI API
+- 投稿取得: X API v2
+
+選定理由は [docs/design.md](docs/design.md) を参照してください。個人用ツールとしてのリスクモデルに対し、Deno の permission model（`--allow-net` 等で許可範囲を限定）が直接的な防御として有効に働く点を重視しています。
 
 最初の本実装では、UI のコンポーネント化、永続化、X List posts fetcher、Agent scoring の順に進める想定です。

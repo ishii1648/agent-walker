@@ -12,16 +12,18 @@
 
 ## リポジトリ整備
 
-- [ ] 最終的な app stack を決める。
-- [ ] 静的プロトタイプを app scaffold に移植する。
-- [ ] README にプロダクト概要とローカル起動手順を書く。
-- [ ] formatter と lint を追加する。
-- [ ] 初期 CI を追加する。
+- [x] 最終的な app stack を決める（Deno + Fresh）。
+- [ ] Fresh プロジェクトを scaffold する（`deno.json`、`fresh.config.ts`、`routes/`、`islands/`、`static/`）。
+- [ ] 静的プロトタイプを `prototype/` に退避し、Fresh route 配下に移植する。
+- [ ] README にプロダクト概要とローカル起動手順（Deno のインストール含む）を書く。
+- [ ] `deno fmt` / `deno lint` の実行を確認する（追加設定不要だが、`deno.json` で範囲を明示する）。
+- [ ] permission scope（`--allow-net`、`--allow-read`、`--allow-write`、`--allow-env`）を `deno task` に固定する。
+- [ ] 初期 CI（`deno fmt --check` / `deno lint` / `deno test`）を追加する。
 
 ## フロントエンド
 
-- [ ] プロトタイプを React component に移植する。
-- [ ] sidebar、feed、detail pane の layout component を作る。
+- [ ] プロトタイプを Preact component（Fresh）に移植する。
+- [ ] sidebar、feed、detail pane の layout component を作る（必要箇所のみ Island 化）。
 - [ ] Inbox、Read Later、Valuable、Skipped、Topics の view state を実装する。
 - [ ] 投稿 action の状態遷移を実装する。
 - [ ] system prompt と X List id の settings UI を作る。
