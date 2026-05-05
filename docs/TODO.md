@@ -13,12 +13,17 @@
 ## リポジトリ整備
 
 - [x] 最終的な app stack を決める（Deno + Fresh）。
-- [ ] Fresh プロジェクトを scaffold する（`deno.json`、`fresh.config.ts`、`routes/`、`islands/`、`static/`）。
-- [ ] 静的プロトタイプを `prototype/` に退避し、Fresh route 配下に移植する。
-- [ ] README にプロダクト概要とローカル起動手順（Deno のインストール含む）を書く。
-- [ ] `deno fmt` / `deno lint` の実行を確認する（追加設定不要だが、`deno.json` で範囲を明示する）。
-- [ ] permission scope（`--allow-net`、`--allow-read`、`--allow-write`、`--allow-env`）を `deno task` に固定する。
-- [ ] 初期 CI（`deno fmt --check` / `deno lint` / `deno test`）を追加する。
+- [x] ローカルに Deno をインストールする（`brew install deno`、現在 2.7.14）。
+- [ ] scaffold 先のディレクトリ構成を決める（A: リポジトリ直下に Fresh / B: `app/` サブディレクトリ）。デフォルトは A。
+- [ ] Fresh プロジェクトを scaffold する（`deno run -A -r jsr:@fresh/init` で `deno.json`、`fresh.config.ts`、`main.ts`、`dev.ts`、`routes/`、`islands/`、`components/`、`static/` を生成）。
+- [ ] 既存の静的プロトタイプ（`index.html` / `app.js` / `styles.css` / `assets/`）を `prototype/` に退避し、参照実装として残す。
+- [ ] `deno.json` の `tasks` を整理する（`start` / `dev` / `build` / `fmt` / `lint` / `check` / `test`）。
+- [ ] permission scope を `deno task` 側に固定する（`--allow-net=api.x.com,api.openai.com,localhost` / `--allow-read=.` / `--allow-write=./data` / `--allow-env=X_BEARER_TOKEN,OPENAI_API_KEY,DATABASE_URL`、`--allow-all` は使わない）。
+- [ ] `data/` ディレクトリを作成し、SQLite ファイル（例: `data/agent-walker.db`）と `.env` を `.gitignore` に追加する。
+- [ ] Drizzle と `jsr:@db/sqlite` の最小セットアップを行う（`drizzle.config.ts`、初期 schema、`drizzle-kit` 相当のマイグレーション運用方針）。
+- [ ] README にプロダクト概要とローカル起動手順（Deno のインストール、`deno task dev`、必要な環境変数）を書く。
+- [ ] `deno fmt` / `deno lint` をリポジトリ全体で 1 回流して整形・指摘ゼロ状態をベースラインにする。
+- [ ] 初期 CI（GitHub Actions）を追加する：`deno fmt --check` / `deno lint` / `deno check` / `deno test`。
 
 ## フロントエンド
 
